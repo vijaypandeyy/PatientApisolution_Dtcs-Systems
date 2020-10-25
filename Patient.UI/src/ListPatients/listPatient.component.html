@@ -1,0 +1,15 @@
+<table *ngIf="patients" class="table">
+    <tr>
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Dob</th>
+        <th>Gender</th>
+    </tr>
+
+    <tr *ngFor="let item of patients">
+        <td> {{item?.Name}}</td>
+        <td> {{item?.SurName}}</td>
+        <td> {{item?.DOB}}</td>
+        <td> {{item?.Gender}}</td>
+    </tr>
+</table>

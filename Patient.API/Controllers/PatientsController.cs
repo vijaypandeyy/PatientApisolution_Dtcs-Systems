@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using iMedOneDB.Models;
 using Patient.API.Services;
@@ -13,33 +14,35 @@ namespace Patient.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    [EnableCors("_AllowSpecificOrigins")]
+    public class PatientsController : ControllerBase
     {
         IPatientService _service;
-        public ValuesController(IPatientService service)
+        public PatientsController(IPatientService service)
         {
             _service = service;
         }
-        // GET api/values
-        [HttpGet]
-        [EnableQuery]
-        [Route("States")]
+        [HttpPost]
+        [DisableCors]
         [EnableCors("_AllowSpecificOrigins")]
-       
-        public IEnumerable<Tblstate> GetStates()
+        public void Post([FromBody] TBLPATIENT value)
         {
-            return _service.GetStates();
+            if (_service.SavePatient(value))
+            {
+                Ok("Data saved");
+            }
+            else
+            {
+                throw new ArgumentException("Data not saved for value :"+value.Name+value.SurName);
+            }
         }
 
         [HttpGet]
         [EnableQuery]
-        [Route("Cities")]
         [EnableCors("_AllowSpecificOrigins")]
-        public IEnumerable<Tblcity> GetCities()
+        public IEnumerable<TBLPATIENT> Get()
         {
-            return _service.GetCities();
+           return _service.GetPatients();
         }
-
-        
     }
 }
